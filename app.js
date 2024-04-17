@@ -76,38 +76,6 @@ passport.use(
   )
 );
 
-//google stretergy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:"https://todo-manager-nqig.onrender.com/auth/google/callback",
-      passReqToCallback: true,
-    },
-    function (request, accessToken, refreshToken, profile, done) {
-      // console.log("profile : " + profile);
-      User.findOne({
-        where: {
-          email: profile.email,
-        },
-      })
-        .then(async (user) => {
-          // console.log(user.email);
-          if (user) {
-            return done(null, user);
-          } else {
-            return done(null, false, {
-              message: "With This email user doesn't exists",
-            });
-          }
-        })
-        .catch((error) => {
-          return done(error);
-        });
-    }
-  )
-);
 passport.serializeUser((user, done) => {
   console.log("Serialize the user with Id : ", user.id);
   done(null, user.id);
